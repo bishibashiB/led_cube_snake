@@ -28,11 +28,18 @@ enum class State : uint8_t
 };
 enum class Direction : uint8_t
 {
-    dirLeft = 0u,
-    dirRight,
-    dirDown,
-    dirUp
+    Left = 0u,
+    Right,
+    Down,
+    Up
 };
+
+std::string dirAsStrings[4] = {
+    "Left",
+    "Right",
+    "Down",
+    "Up"};
+
 struct MovePos
 {
     Direction dir;

@@ -21,6 +21,13 @@
 x = origin ([0,0]-coordinate) of each panel
 */
 
+// fwd declarations (extern to be able to use incomplete-const )
+extern const PanelCfg panelA;
+extern const PanelCfg panelB;
+extern const PanelCfg panelC;
+extern const PanelCfg panelD;
+extern const PanelCfg panelE;
+
 const PanelCfg panelA{
     {{&panelB, PanelSides::Side1},
      {&panelE, PanelSides::Side1},

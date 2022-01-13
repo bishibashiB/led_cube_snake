@@ -39,8 +39,9 @@ void setup()
 void loop()
 {
   extern const std::array<PanelCfg, TileNum_X * TileNum_Y> PanelArray;
-  SnakeWorld<sizeX ,sizeY, TileNum_X,TileNum_Y> world{PanelArray};
-  SnakeGame game{world};
+
+  SnakeWorld<sizeX ,sizeY, TileNum_X, TileNum_Y> world{PanelArray};
+  SnakeGame<sizeX ,sizeY, TileNum_X, TileNum_Y> game{world};
 
   if (Serial.available())
   {

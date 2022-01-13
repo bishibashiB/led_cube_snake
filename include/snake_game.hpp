@@ -9,10 +9,10 @@
 #include "snake_world.hpp"
 #include "snake_player.hpp"
 
+template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 class SnakeGame
 {
 public:
-    template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
     SnakeGame(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY> &world);
 
     void addPlayer(uint8_t id);
@@ -31,8 +31,8 @@ private:
     void checkCollision();
     std::vector<SnakePlayer> m_players;
     // World image class
-    template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
-    SnakeWorld<matrixX, matrixY, tileNumX, tileNumY> &m_world;
+    SnakeWorld<matrixX, matrixY, tileNumX, tileNumY> m_world;
+    SnakeWorld<matrixX, matrixY, tileNumX, tileNumY> m_world_new;
 };
 
 #endif

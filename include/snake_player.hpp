@@ -10,7 +10,7 @@
 class SnakePlayer
 {
 public:
-    SnakePlayer(uint8_t id) : id(id){};
+    SnakePlayer(uint8_t id);
 
     void MoveSnake();
 
