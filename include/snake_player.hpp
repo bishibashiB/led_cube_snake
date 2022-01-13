@@ -3,7 +3,7 @@
 #define SNAKE_PLAYER_HPP
 
 #include <stdint.h>
-#include <vector>
+#include <list>
 
 #include "snake_types.hpp"
 
@@ -12,14 +12,14 @@ class SnakePlayer
 public:
     SnakePlayer(uint8_t id) : id(id){};
 
-    void moveSnake();
+    void MoveSnake();
 
-    std::vector<pos_t> getSnake();
+    std::list<Position> GetSnake();
 
 private:
     uint8_t id;
-    std::vector<pos_t> snake;
-    direction_e dir;
-}
+    std::list<Position> snake;
+    Direction dir;
+};
 
-#endif
+#endif // SNAKE_PLAYER_HPP

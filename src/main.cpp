@@ -1,26 +1,35 @@
 #include <Arduino.h>
+#include <pins_arduino.h>
+#include <Adafruit_GFX.h> // Core graphics library
+#include <Adafruit_NeoMatrix.h>
+#include <Adafruit_NeoPixel.h>
+#include "math.h"
 
-#undef max
-#undef min
+#include "config.h"
+#include "snake_types.hpp"
+#include "snake_game.hpp"
+
 #include <stdio.h>
 #include <iostream>
-using namespace std;
-extern "C"
-{
-  int _write(int fd, char *ptr, int len)
-  {
-    (void)fd;
-    return Serial.write(ptr, len);
-  }
+
+#include <array>
+
+
+
+//////////////////////////
+//       OBJECTS        //
+//////////////////////////
+namespace {
+//Definition of the LED Matrix Object
+// #define LedPin D2 //esp8266
+#define Pin 27 //@ ESP32
+
+Adafruit_NeoMatrix matrix(sizeX, sizeY, Pin,
+                          NEO_MATRIX_TOP + NEO_MATRIX_LEFT +
+                              NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
+                          NEO_GRB + NEO_KHZ800);
 }
 
-enum class SerialCmd : int
-{
-  ADD_PLAYER = 1,     // " 1Byte number / ID,  2x3Byte color head / body "
-  REMOVE_PLAYER = 2,  // "1Byte number/ID"
-  ITERATE_STEP = 3,   // 0Byte, ... all players
-  DIR_CMD_PLAYER = 4, // "1Byte number/ID, 1Byte NEW rel. direction ('r', 'l')"
-};
 
 void setup()
 {
@@ -29,6 +38,10 @@ void setup()
 
 void loop()
 {
+  extern const std::array<PanelCfg, TileNum_X * TileNum_Y> PanelArray;
+  SnakeWorld<sizeX ,sizeY, TileNum_X,TileNum_Y> world{PanelArray};
+  SnakeGame game{world};
+
   if (Serial.available())
   {
     char terminator = '\n';
@@ -39,21 +52,21 @@ void loop()
     case SerialCmd::ADD_PLAYER:
       Serial.write("ADD_PLAYER ");
       Serial.write(readData.c_str()[1]);
-      addPlayer(readData.c_str()[1]);
+      game.addPlayer(readData.c_str()[1]);
       break;
     case SerialCmd::REMOVE_PLAYER:
       Serial.write("REMOVE_PLAYER ");
       Serial.write(readData.c_str()[1]);
-      removePlayer(readData.c_str()[1]);
+      game.removePlayer(readData.c_str()[1]);
       break;
     case SerialCmd::ITERATE_STEP:
       Serial.write("ITERATE_STEP ");
-      iterateWorld();
+      game.iterateWorld();
       break;
     case SerialCmd::DIR_CMD_PLAYER:
       Serial.write("DIR_CMD_PLAYER ");
       Serial.write(readData.c_str()[1]);
-      changePlayerDirection(readData.c_str()[1]);
+      game.changePlayerDirection((Direction)readData.c_str()[1]);
       break;
     default:
       Serial.write("unknown command received ");

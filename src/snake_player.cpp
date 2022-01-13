@@ -7,6 +7,6 @@ SnakePlayer::SnakePlayer(uint8_t id) : id(id)
     // set random start position ... which is unused
 }
 
-void SnakePlayer::moveSnake() {}
+void SnakePlayer::MoveSnake() {}
 
-std::vector<pos_t> SnakePlayer::getSnake() {}
+std::list<Position> SnakePlayer::GetSnake() {}
