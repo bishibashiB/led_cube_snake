@@ -2,24 +2,35 @@
 
 #include "snake_player.hpp"
 
-SnakePlayer::SnakePlayer(uint8_t id)
+SnakePlayer::SnakePlayer(uint8_t id, SnakeBase snake, Direction dir)
     : id(id)
+    , snake(snake)
+    , dir(dir)
 {
-    // set random start position ... which is unused
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 void SnakePlayer::MoveSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& world)
 {
-    snake.pop_back();
-    MovePos mp{dir, snake.front()};
-    Position newPos = world.movePixel(mp);
-    snake.push_front(snake.front());
-}
+    // old head
+    world.SetPosition(snake.body.begin(), State::PlayerBody);
 
-std::list<Position> SnakePlayer::GetSnake()
-{
-    return snake;
+    // new head
+    Position newPos = world.movePixel({dir, snake.body.front()});
+    if (world.GetPosition(newPos) == State::Snack)
+    {
+        snake.length++;
+        world.SetPosition(world.GetFreePosition(), State::Snack);
+    }
+    snake.body.push_front(snake.body.front());
+    world.SetPosition(snake.body.begin(), State::PlayerHead);
+
+    // old tail
+    if (snake.body.size() >= snake.length)
+    {
+        world.SetPosition(snake.body.back(), State::Free);
+        snake.body.pop_back();
+    }
 }
 
 void SnakePlayer::UpdateDirection(Direction turn)

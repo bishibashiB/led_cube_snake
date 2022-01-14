@@ -12,9 +12,8 @@
 #define sizeX (Matrix_X * TileNum_X)
 #define sizeY (Matrix_Y * TileNum_Y)
 
-#define systemTickDelayMS 1
-#define stepTransitionStates 20
+// #define systemTickDelayMS 1
+// #define stepTransitionStates 20
 
-const uint32_t ColorDead = 0x0, ColorBirth = 0x206420, ColorLive = 0x649014, ColorDying = 0x342814;
 
 #endif // CONFIG_H

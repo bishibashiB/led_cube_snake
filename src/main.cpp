@@ -38,7 +38,7 @@ void loop()
 {
     extern const std::array<PanelCfg, TileNum_X * TileNum_Y> PanelArray;
 
-    SnakeWorld<sizeX, sizeY, TileNum_X, TileNum_Y> world{PanelArray};
+    SnakeWorld<sizeX, sizeY, TileNum_X, TileNum_Y> world{PanelArray, matrix};
     SnakeGame<sizeX, sizeY, TileNum_X, TileNum_Y> game{world};
 
     if (Serial.available())
@@ -51,21 +51,21 @@ void loop()
         case SerialCmd::ADD_PLAYER:
             Serial.write("ADD_PLAYER ");
             Serial.write(readData.c_str()[1]);
-            game.addPlayer(readData.c_str()[1]);
+            game.AddPlayer(readData.c_str()[1]);
             break;
         case SerialCmd::REMOVE_PLAYER:
             Serial.write("REMOVE_PLAYER ");
             Serial.write(readData.c_str()[1]);
-            game.removePlayer(readData.c_str()[1]);
+            game.RemovePlayer(readData.c_str()[1]);
             break;
         case SerialCmd::ITERATE_STEP:
             Serial.write("ITERATE_STEP ");
-            game.iterateWorld();
+            game.IterateWorld();
             break;
         case SerialCmd::DIR_CMD_PLAYER:
             Serial.write("DIR_CMD_PLAYER ");
             Serial.write(readData.c_str()[1]);
-            game.changePlayerDirection((Direction)readData.c_str()[1]);
+            game.ChangePlayerDirection(readData.c_str()[1], (Direction)readData.c_str()[2]);
             break;
         default:
             Serial.write("unknown command received ");

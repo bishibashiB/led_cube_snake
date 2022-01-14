@@ -1,12 +1,16 @@
-
+#include <random>
+#include <type_traits>
 
 #include "snake_world.hpp"
 
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
-SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::SnakeWorld(const std::array<PanelCfg, tileNumX * tileNumY>& cfg)
+SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::SnakeWorld(const std::array<PanelCfg, tileNumX * tileNumY>& cfg,
+                                                             Adafruit_NeoMatrix& matrix)
     : cfg(cfg)
+    , m_matrix(matrix)
 {
+    m_matrix.fillScreen(0);
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
@@ -19,8 +23,62 @@ template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 void SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::SetPosition(Position p, State state)
 {
     m_world[p.x][p.y] = state;
+    m_matrix.drawPixel(p.x, p.y, m_matrix.Color(1, 1, 1)); // FIXME
 }
 
+template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
+void SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::Update()
+{
+    // try painting pixel in SetPosition function
+
+    // for (Position_type i; i < (matrixX * tileNumX); i++)
+    // {
+    //     for (Position_type j; j < (matrixY * tileNumY); j++)
+    //     {
+    //         m_matrix.drawPixel(x, y, m_matrix.Color(p2_r, p2_g, p2_b));
+    //     }
+    // }
+    m_matrix.show();
+}
+
+template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
+Position SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetFreePosition()
+{
+    Position_type x, y;
+    do
+    {
+        std::random_device r;
+        std::default_random_engine e1(r());
+        std::uniform_int_distribution<Position_type> uniform_distx(0, matrixX * tileNumX - 1); // spawn on same panel
+        x = uniform_distx(e1);
+        std::uniform_int_distribution<Position_type> uniform_disty(0, matrixY * tileNumY - 1); // spawn on same panel
+        y = uniform_disty(e1);
+    } while (GetPosition({x, y}) != State::Free);
+    return {x, y};
+}
+
+// template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
+// void SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::blendPixels(byte x, byte y, uint32_t p1, uint32_t p2, byte
+// iter)
+// {
+//     // uint16_t px = getX(x, y);
+//     // uint32_t p2Is = matrix.getPixelColor(px);
+//     // TODO
+//     // if (p2Is == p1)
+//     // {
+//     //     matrix.setPixelColor(px, p1);
+//     //     return;
+//     // }
+//     uint8_t p1_r = (p1 & 0xFE0000) >> 16, p2_r = (p2 & 0xFE0000) >> 16;
+//     uint8_t p1_g = (p1 & 0xFE00) >> 8, p2_g = (p2 & 0xFE00) >> 8;
+//     uint8_t p1_b = (p1 & 0xFE), p2_b = (p2 & 0xFE);
+//     m_matrix.drawPixel(x, y, m_matrix.Color(p2_r, p2_g, p2_b));
+
+//     // uint32_t np = (blendColor(p1_r, p2_r, iter) << 16) | (blendColor(p1_g, p2_g, iter) << 8) | (blendColor(p1_b,
+//     // p2_b, iter));
+
+//     // matrix.setPixelColor(px, np);
+// }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIsEdgeOfPanel(const Position p)

@@ -11,17 +11,16 @@
 class SnakePlayer
 {
   public:
-    SnakePlayer(uint8_t id);
+    SnakePlayer(uint8_t id, SnakeBase snake, Direction dir);
 
     template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
     void MoveSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& world);
 
-    std::list<Position> GetSnake();
     void UpdateDirection(Direction turn);
 
   private:
     uint8_t id;
-    std::list<Position> snake;
+    SnakeBase snake;
     Direction dir;
 };
 

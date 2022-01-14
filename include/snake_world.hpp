@@ -5,6 +5,8 @@
 
 #include <stdint.h>
 #include <array>
+#include <Adafruit_NeoMatrix.h>
+#include <Adafruit_NeoPixel.h>
 
 #include "snake_types.hpp"
 
@@ -12,11 +14,19 @@ template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 class SnakeWorld
 {
   public:
-    SnakeWorld(const std::array<PanelCfg, tileNumX * tileNumY>& cfg);
+    SnakeWorld(const std::array<PanelCfg, tileNumX * tileNumY>& cfg, Adafruit_NeoMatrix& matrix);
 
     State GetPosition(Position p);
 
     void SetPosition(Position p, State state);
+
+    void Update();
+    void MovePixel(MovePos& mp);
+    void AddNewSnack();
+    Position GetFreePosition();
+
+  private:
+    // void blendPixels(byte x, byte y, uint32_t p1, uint32_t p2, byte iter);
 
     bool PosIsEdgeOfPanel(const Position p);
 
@@ -41,12 +51,11 @@ class SnakeWorld
 
     MovePos GetNeigborPosition(const MovePos f);
 
-    void MovePixel(MovePos& mp);
 
-  private:
     std::array<PanelCfg, tileNumX * tileNumY>& cfg;
     State m_world[matrixX * tileNumX][matrixY * tileNumY];
     State m_newWorld[matrixX * tileNumX][matrixY * tileNumY];
+    Adafruit_NeoMatrix& m_matrix;
 };
 
 #endif // SNAKE_WORLD_HPP

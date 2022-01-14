@@ -3,6 +3,8 @@
 #define SNAKE_TYPES_HPP
 
 #include <Arduino.h>
+#include <list>
+
 #include "config.h"
 
 ////////////////
@@ -16,13 +18,18 @@ struct Position
     Position_type y;
 };
 
+struct SnakeBase{
+     std::list<Position> body;
+    Position_type length;
+};
+
 ////////////////
 // Snake types
 ////////////////
 enum class State : uint8_t
 {
     Free = 0u,
-    Food,
+    Snack,
     PlayerHead,
     PlayerBody
 };

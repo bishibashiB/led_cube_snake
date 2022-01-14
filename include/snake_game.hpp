@@ -15,20 +15,20 @@ class SnakeGame
   public:
     SnakeGame(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& world);
 
-    void addPlayer(uint8_t id);
-    void removePlayer(uint8_t id);
+    void AddPlayer(uint8_t id);
+    void RemovePlayer(uint8_t id);
 
-    void changePlayerDirection(Direction d);
+    void ChangePlayerDirection(uint8_t id, Direction d);
 
     // 1) Player::moveSnake
     // 2) build new world Player::getSnake
     // 3) check collision (self / inter-players)
     // 4) deconstruct game-over players (remove from vector)
-    void iterateWorld();
+    void IterateWorld();
 
   private:
     // (self / inter-players), also directly removes game-over player
-    void checkCollision();
+    void CheckCollision();
     std::vector<SnakePlayer> m_players;
     // World image class
     SnakeWorld<matrixX, matrixY, tileNumX, tileNumY> m_world;
