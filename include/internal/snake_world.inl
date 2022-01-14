@@ -111,22 +111,22 @@ bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge4(const MovePos
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge1_AndLeaving(const MovePos f)
 {
-    return (PosIs_Edge1(f) && f.dir == Direction::Up);
+    return (PosIs_Edge1(f) && f.m_dir == Direction::Up);
 }
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge2_AndLeaving(const MovePos f)
 {
-    return (PosIs_Edge2(f) && f.dir == Direction::Right);
+    return (PosIs_Edge2(f) && f.m_dir == Direction::Right);
 }
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge3_AndLeaving(const MovePos f)
 {
-    return (PosIs_Edge3(f) && f.dir == Direction::Down);
+    return (PosIs_Edge3(f) && f.m_dir == Direction::Down);
 }
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge4_AndLeaving(const MovePos f)
 {
-    return (PosIs_Edge4(f) && f.dir == Direction::Left);
+    return (PosIs_Edge4(f) && f.m_dir == Direction::Left);
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
@@ -149,13 +149,13 @@ template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIsCornerOfPanelAndLeaving(const MovePos f)
 {
     return ((((f.pos.x % Matrix_X) == 0) && ((f.pos.y % Matrix_Y) == 0)
-             && (f.dir == Direction::Up || f.dir == Direction::Left))
+             && (f.m_dir == Direction::Up || f.m_dir == Direction::Left))
             || (((f.pos.x % Matrix_X) == 0) && ((f.pos.y % Matrix_Y) == (Matrix_Y - 1))
-                && (f.dir == Direction::Up || f.dir == Direction::Right))
+                && (f.m_dir == Direction::Up || f.m_dir == Direction::Right))
             || (((f.pos.x % Matrix_X) == (Matrix_X - 1)) && ((f.pos.y % Matrix_Y) == 0)
-                && (f.dir == Direction::Down || f.dir == Direction::Left))
+                && (f.m_dir == Direction::Down || f.m_dir == Direction::Left))
             || (((f.pos.x % Matrix_X) == (Matrix_X - 1)) && ((f.pos.y % Matrix_Y) == (Matrix_Y - 1))
-                && (f.dir == Direction::Down || f.dir == Direction::Right)));
+                && (f.m_dir == Direction::Down || f.m_dir == Direction::Right)));
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
@@ -260,25 +260,25 @@ MovePos SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetNeigborPosition(con
 
     if (PanelSides::Side1 == neighborPanelSide)
     {
-        ret.dir = Direction::Down;
+        ret.m_dir = Direction::Down;
         // y coordinate stays '0'
         ret.pos.y = neighborPanel->range.topLeft.y;
     }
     else if (PanelSides::Side2 == neighborPanelSide)
     {
-        ret.dir = Direction::Left;
+        ret.m_dir = Direction::Left;
         // x coordinate stays '15'
         ret.pos.x = neighborPanel->range.bottomRight.x;
     }
     else if (PanelSides::Side3 == neighborPanelSide)
     {
-        ret.dir = Direction::Up;
+        ret.m_dir = Direction::Up;
         // y coordinate stays 15
         ret.pos.y = neighborPanel->range.bottomRight.y;
     }
     else if (PanelSides::Side4 == neighborPanelSide)
     {
-        ret.dir = Direction::Right;
+        ret.m_dir = Direction::Right;
         // x coordinate stays 0
         ret.pos.x = neighborPanel->range.topLeft.x;
     }
@@ -349,13 +349,13 @@ void SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::MovePixel(MovePos& mp)
 {
     if (!PosIsEdgeOfPanelAndLeaving(mp))
     {
-        if (mp.dir == Direction::Down)
+        if (mp.m_dir == Direction::Down)
             mp.pos.y++;
-        else if (mp.dir == Direction::Left)
+        else if (mp.m_dir == Direction::Left)
             mp.pos.x--;
-        else if (mp.dir == Direction::Right)
+        else if (mp.m_dir == Direction::Right)
             mp.pos.x++;
-        else if (mp.dir == Direction::Up)
+        else if (mp.m_dir == Direction::Up)
             mp.pos.y--;
     }
     else

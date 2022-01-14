@@ -11,17 +11,23 @@
 class SnakePlayer
 {
   public:
-    SnakePlayer(uint8_t id, SnakeBase snake, Direction dir);
+    SnakePlayer(uint8_t id, SnakeBase snake, Direction m_dir);
 
     template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
     void MoveSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& world);
 
     void UpdateDirection(Direction turn);
 
+    uint8_t GetId();
+
+    SnakeBase GetSnake();
+
   private:
     uint8_t id;
     SnakeBase snake;
-    Direction dir;
+    Direction m_dir;
 };
+
+#include "./internal/snake_player.inl"
 
 #endif // SNAKE_PLAYER_HPP

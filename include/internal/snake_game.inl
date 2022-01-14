@@ -37,25 +37,29 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::AddPlayer(uint8_t id)
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::RemovePlayer(uint8_t id)
 {
-    auto ids_match = [&id](SnakePlayer& p) { return p.id == id; };
+    auto ids_match = [&id](SnakePlayer& p) { return p.GetId() == id; };
 
     // remove player from player container
     auto it = std::remove_if(m_players.begin(), m_players.end(), ids_match);
+    if (it == m_players.end())
+    {
+        // print error
+    }
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::ChangePlayerDirection(uint8_t id, Direction d)
 {
-    auto ids_match = [&id](SnakePlayer& p) { return p.id == id; };
+    auto ids_match = [&id](SnakePlayer p) { return p.GetId() == id; };
 
-    auto& it = std::find(m_players.begin(), m_players.end(), ids_match);
-    it->dir = d;
+    auto it = std::find_if(m_players.begin(), m_players.end(), ids_match);
+    it->UpdateDirection(d);
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::IterateWorld()
 {
-    for (const auto& p : m_players)
+    for (auto& p : m_players)
     {
         p.MoveSnake(m_world);
     }
@@ -73,9 +77,9 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::CheckCollision()
     {
         for (auto& otherP : m_players)
         {
-            for (auto pos : otherP.snake.body)
+            for (auto pos : otherP.GetSnake().body)
             {
-                if (p.snake.body.front().x == pos.x && p.snake.body.front().y == pos.y)
+                if (p.GetSnake().body.front().x == pos.x && p.GetSnake().body.front().y == pos.y)
                 {
                     playerWithCollisions.push_back(&p);
                 }
@@ -86,8 +90,8 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::CheckCollision()
     // remove player from player container
     while (!playerWithCollisions.empty())
     {
-        SnakePlayer* p = &playerWithCollisions.back();
-        auto ids_match = [p](SnakePlayer& oneOfPlayersList) { return oneOfPlayersList.id == p->id; };
+        SnakePlayer* p = playerWithCollisions.back();
+        auto ids_match = [p](SnakePlayer& oneOfPlayersList) { return oneOfPlayersList.GetId() == p->GetId(); };
         std::remove_if(m_players.begin(), m_players.end(), ids_match);
     }
 }

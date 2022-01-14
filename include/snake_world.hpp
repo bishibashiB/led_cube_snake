@@ -52,10 +52,12 @@ class SnakeWorld
     MovePos GetNeigborPosition(const MovePos f);
 
 
-    std::array<PanelCfg, tileNumX * tileNumY>& cfg;
+    const std::array<PanelCfg, tileNumX * tileNumY>& cfg;
     State m_world[matrixX * tileNumX][matrixY * tileNumY];
     State m_newWorld[matrixX * tileNumX][matrixY * tileNumY];
     Adafruit_NeoMatrix& m_matrix;
 };
+
+#include "./internal/snake_world.inl"
 
 #endif // SNAKE_WORLD_HPP

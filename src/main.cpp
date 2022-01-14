@@ -36,7 +36,7 @@ void setup()
 
 void loop()
 {
-    extern const std::array<PanelCfg, TileNum_X * TileNum_Y> PanelArray;
+    const std::array<PanelCfg, TileNum_X * TileNum_Y> PanelArray{};
 
     SnakeWorld<sizeX, sizeY, TileNum_X, TileNum_Y> world{PanelArray, matrix};
     SnakeGame<sizeX, sizeY, TileNum_X, TileNum_Y> game{world};

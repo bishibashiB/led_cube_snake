@@ -34,4 +34,6 @@ class SnakeGame
     SnakeWorld<matrixX, matrixY, tileNumX, tileNumY> m_world;
 };
 
+#include "./internal/snake_game.inl"
+
 #endif
