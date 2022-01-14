@@ -11,41 +11,42 @@
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 class SnakeWorld
 {
-public:
-    SnakeWorld(const std::array<PanelCfg, tileNumX * tileNumY> &cfg);
+  public:
+    SnakeWorld(const std::array<PanelCfg, tileNumX * tileNumY>& cfg);
 
-    bool isPositionFree(Position p);
+    State GetPosition(Position p);
 
-    void setPosition(Position p);
-    void resetPosition(Position p);
+    void SetPosition(Position p, State state);
 
-    bool posIsEdgeOfPanel(const Position p);
+    bool PosIsEdgeOfPanel(const Position p);
 
-    inline bool posIs_Edge1(const MovePos f);
-    inline bool posIs_Edge2(const MovePos f);
-    inline bool posIs_Edge3(const MovePos f);
-    inline bool posIs_Edge4(const MovePos f);
+    inline bool PosIs_Edge1(const MovePos f);
+    inline bool PosIs_Edge2(const MovePos f);
+    inline bool PosIs_Edge3(const MovePos f);
+    inline bool PosIs_Edge4(const MovePos f);
 
-    inline bool posIs_Edge1_AndLeaving(const MovePos f);
-    inline bool posIs_Edge2_AndLeaving(const MovePos f);
-    inline bool posIs_Edge3_AndLeaving(const MovePos f);
-    inline bool posIs_Edge4_AndLeaving(const MovePos f);
-    inline bool posIsEdgeOfPanelAndLeaving(const MovePos f);
-    bool posIsCornerOfPanel(const Position p);
-    bool posIsCornerOfPanelAndLeaving(const MovePos f);
-    const PanelCfg &getPanelFromPosition(const Position p);
-    const Position getPosOnCurPanel(const Position p);
-    PanelSides whichPanelSide(const MovePos f);
-    PanelSides getNeigborPanelSide(const PanelSides s, const PanelCfg thisPanel);
+    inline bool PosIs_Edge1_AndLeaving(const MovePos f);
+    inline bool PosIs_Edge2_AndLeaving(const MovePos f);
+    inline bool PosIs_Edge3_AndLeaving(const MovePos f);
+    inline bool PosIs_Edge4_AndLeaving(const MovePos f);
+    inline bool PosIsEdgeOfPanelAndLeaving(const MovePos f);
+    bool PosIsCornerOfPanel(const Position p);
+    bool PosIsCornerOfPanelAndLeaving(const MovePos f);
+    const PanelCfg& GetPanelFromPosition(const Position p);
+    const Position GetPosOnCurPanel(const Position p);
+    PanelSides WhichPanelSide(const MovePos f);
+    PanelSides GetNeigborPanelSide(const PanelSides s, const PanelCfg thisPanel);
 
-    const PanelCfg *getNeigborPanel(const PanelSides s, const PanelCfg thisPanel);
+    const PanelCfg* GetNeigborPanel(const PanelSides s, const PanelCfg thisPanel);
 
-    MovePos getNeigborPosition(const MovePos f);
+    MovePos GetNeigborPosition(const MovePos f);
 
-    void movePixel(MovePos &mp);
+    void MovePixel(MovePos& mp);
 
-private:
-    std::array<PanelCfg, tileNumX * tileNumY> &cfg;
+  private:
+    std::array<PanelCfg, tileNumX * tileNumY>& cfg;
+    State m_world[matrixX * tileNumX][matrixY * tileNumY];
+    State m_newWorld[matrixX * tileNumX][matrixY * tileNumY];
 };
 
 #endif // SNAKE_WORLD_HPP

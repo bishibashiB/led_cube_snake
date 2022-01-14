@@ -34,11 +34,11 @@ enum class Direction : uint8_t
     Up
 };
 
-std::string dirAsStrings[4] = {
-    "Left",
-    "Right",
-    "Down",
-    "Up"};
+// std::string dirAsStrings[4] = {
+//     "Left",
+//     "Right",
+//     "Down",
+//     "Up"};
 
 struct MovePos
 {
@@ -63,7 +63,7 @@ enum class PanelSides : uint8_t
 };
 struct PanelSide
 {
-    const PanelCfg *neighbor; // 1..(TileNum_X+TileNum_Y)
+    const PanelCfg* neighbor; // 1..(TileNum_X+TileNum_Y)
     PanelSides panelSide;     // 1..4
 };
 
