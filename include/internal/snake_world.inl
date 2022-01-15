@@ -50,7 +50,7 @@ Position SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetFreePosition()
     uint16_t x, y;
     Position p;
         std::random_device r;
-        std::default_random_engine e1(r());
+    std::mt19937 e1(r());
     std::uniform_int_distribution<uint16_t> uniform_distx(0, matrixX * tileNumX - 1); // spawn on same panel
     std::uniform_int_distribution<uint16_t> uniform_disty(0, matrixY * tileNumY - 1); // spawn on same panel
     do
@@ -131,22 +131,22 @@ bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge4(const MovePos
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge1_AndLeaving(const MovePos f)
 {
-    return (PosIs_Edge1(f) && f.m_dir == Direction::Up);
+    return (PosIs_Edge1(f) && f.dir == Direction::Up);
 }
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge2_AndLeaving(const MovePos f)
 {
-    return (PosIs_Edge2(f) && f.m_dir == Direction::Right);
+    return (PosIs_Edge2(f) && f.dir == Direction::Right);
 }
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge3_AndLeaving(const MovePos f)
 {
-    return (PosIs_Edge3(f) && f.m_dir == Direction::Down);
+    return (PosIs_Edge3(f) && f.dir == Direction::Down);
 }
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge4_AndLeaving(const MovePos f)
 {
-    return (PosIs_Edge4(f) && f.m_dir == Direction::Left);
+    return (PosIs_Edge4(f) && f.dir == Direction::Left);
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
@@ -169,13 +169,13 @@ template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIsCornerOfPanelAndLeaving(const MovePos f)
 {
     return ((((f.pos.x % matrixX) == 0) && ((f.pos.y % matrixY) == 0)
-             && (f.m_dir == Direction::Up || f.m_dir == Direction::Left))
+             && (f.dir == Direction::Up || f.dir == Direction::Left))
             || (((f.pos.x % matrixX) == 0) && ((f.pos.y % matrixY) == (matrixY - 1))
-                && (f.m_dir == Direction::Up || f.m_dir == Direction::Right))
+                && (f.dir == Direction::Up || f.dir == Direction::Right))
             || (((f.pos.x % matrixX) == (matrixX - 1)) && ((f.pos.y % matrixY) == 0)
-                && (f.m_dir == Direction::Down || f.m_dir == Direction::Left))
+                && (f.dir == Direction::Down || f.dir == Direction::Left))
             || (((f.pos.x % matrixX) == (matrixX - 1)) && ((f.pos.y % matrixY) == (matrixY - 1))
-                && (f.m_dir == Direction::Down || f.m_dir == Direction::Right)));
+                && (f.dir == Direction::Down || f.dir == Direction::Right)));
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
@@ -280,25 +280,25 @@ MovePos SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetNeigborPosition(con
 
     if (PanelSides::Side1 == neighborPanelSide)
     {
-        ret.m_dir = Direction::Down;
+        ret.dir = Direction::Down;
         // y coordinate stays '0'
         ret.pos.y = neighborPanel->range.topLeft.y;
     }
     else if (PanelSides::Side2 == neighborPanelSide)
     {
-        ret.m_dir = Direction::Left;
+        ret.dir = Direction::Left;
         // x coordinate stays '15'
         ret.pos.x = neighborPanel->range.bottomRight.x;
     }
     else if (PanelSides::Side3 == neighborPanelSide)
     {
-        ret.m_dir = Direction::Up;
+        ret.dir = Direction::Up;
         // y coordinate stays 15
         ret.pos.y = neighborPanel->range.bottomRight.y;
     }
     else if (PanelSides::Side4 == neighborPanelSide)
     {
-        ret.m_dir = Direction::Right;
+        ret.dir = Direction::Right;
         // x coordinate stays 0
         ret.pos.x = neighborPanel->range.topLeft.x;
     }
@@ -369,13 +369,13 @@ void SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::MovePixel(MovePos& mp)
 {
     if (!PosIsEdgeOfPanelAndLeaving(mp))
     {
-        if (mp.m_dir == Direction::Down)
+        if (mp.dir == Direction::Down)
             mp.pos.y++;
-        else if (mp.m_dir == Direction::Left)
+        else if (mp.dir == Direction::Left)
             mp.pos.x--;
-        else if (mp.m_dir == Direction::Right)
+        else if (mp.dir == Direction::Right)
             mp.pos.x++;
-        else if (mp.m_dir == Direction::Up)
+        else if (mp.dir == Direction::Up)
             mp.pos.y--;
     }
     else

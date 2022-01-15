@@ -31,6 +31,7 @@ void SnakePlayer::MoveSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& wo
         world.SetPosition(snackPos, State::Snack, world.GetSnackColor());
     }
     m_snake.body.push_front(movedPixel.pos);
+    m_dir = movedPixel.dir;
     world.SetPosition(m_snake.body.front(), State::PlayerHead, m_headColor);
 
     // old tail

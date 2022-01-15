@@ -60,7 +60,7 @@ enum class Direction : uint8_t
 
 struct MovePos
 {
-    Direction m_dir;
+    Direction dir;
     Position pos;
 };
 

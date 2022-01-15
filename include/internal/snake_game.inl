@@ -16,19 +16,19 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::AddPlayer(uint8_t id, Colo
 {
     // generate random snake head to world for display
     std::random_device r;
-    std::default_random_engine e1(r());
+    std::mt19937 gen(r());
     std::uniform_int_distribution<Position_type> uniform_distx(0, matrixX - 1); // spawn on same panel
-    Position_type x = uniform_distx(e1);
+    Position_type x = uniform_distx(gen);
     std::uniform_int_distribution<Position_type> uniform_disty(0, matrixY - 1); // spawn on same panel
-    Position_type y = uniform_disty(e1);
+    Position_type y = uniform_disty(gen);
 
     // std::uniform_int_distribution<typename std::underlying_type<Direction>::type> uniform_distDir(0, 3);
     std::uniform_int_distribution<uint16_t> uniform_distDir(0, 3);
-    Direction dir = (Direction)uniform_distDir(e1);
+    Direction dir = (Direction)uniform_distDir(gen);
 
     SnakeBase snake;
     snake.body.push_front({x, y});
-    snake.length = 5; // TODO make variable
+    snake.length = 2; // TODO make variable
     m_players.emplace_back(id, snake, dir, headColor, bodyColor);
     m_world.SetPosition(snake.body.front(), State::PlayerHead, headColor);
 }
