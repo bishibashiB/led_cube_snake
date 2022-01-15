@@ -45,6 +45,11 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::RemovePlayer(uint8_t id)
         Serial.write("RemovePlayer player unknown ");
         Serial.write(id);
     }
+    else
+    {
+        it->RemoveDisplay(m_world);
+        m_players.erase(it);
+    }
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
