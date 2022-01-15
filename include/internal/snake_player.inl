@@ -1,5 +1,4 @@
 
-
 #include "snake_player.hpp"
 
 SnakePlayer::SnakePlayer(uint8_t id, SnakeBase snake, Direction dir, Color headColor, Color bodyColor)

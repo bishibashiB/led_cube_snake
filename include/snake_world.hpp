@@ -7,6 +7,8 @@
 #include <array>
 #include <Adafruit_NeoMatrix.h>
 #include <Adafruit_NeoPixel.h>
+#include <random>
+#include <esp_system.h>
 
 #include "snake_types.hpp"
 

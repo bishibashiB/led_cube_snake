@@ -1,4 +1,4 @@
-#include <random>
+
 #include <type_traits>
 
 #include "snake_world.hpp"
@@ -49,14 +49,11 @@ Position SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetFreePosition()
 {
     uint16_t x, y;
     Position p;
-        std::random_device r;
-    std::mt19937 e1(r());
-    std::uniform_int_distribution<uint16_t> uniform_distx(0, matrixX * tileNumX - 1); // spawn on same panel
-    std::uniform_int_distribution<uint16_t> uniform_disty(0, matrixY * tileNumY - 1); // spawn on same panel
+
     do
     {
-        x = uniform_distx(e1);
-        y = uniform_disty(e1);
+        x = esp_random() % (matrixX * tileNumX);
+        y = esp_random() % (matrixY * tileNumY);
         p = Position{x, y};
     } while (GetPosition(p) != State::Free);
     return {x, y};

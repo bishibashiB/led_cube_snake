@@ -1,6 +1,4 @@
 
-#include <random>
-// #include <type_traits>
 
 #include "snake_types.hpp"
 #include "snake_game.hpp"
@@ -14,17 +12,12 @@ SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::SnakeGame(SnakeWorld<matrixX, m
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::AddPlayer(uint8_t id, Color headColor, Color bodyColor)
 {
-    // generate random snake head to world for display
-    std::random_device r;
-    std::mt19937 gen(r());
-    std::uniform_int_distribution<Position_type> uniform_distx(0, matrixX - 1); // spawn on same panel
-    Position_type x = uniform_distx(gen);
-    std::uniform_int_distribution<Position_type> uniform_disty(0, matrixY - 1); // spawn on same panel
-    Position_type y = uniform_disty(gen);
+    Position_type x = esp_random() % (matrixX);
+    Position_type y = esp_random() % (matrixY);
 
     // std::uniform_int_distribution<typename std::underlying_type<Direction>::type> uniform_distDir(0, 3);
     std::uniform_int_distribution<uint16_t> uniform_distDir(0, 3);
-    Direction dir = (Direction)uniform_distDir(gen);
+    Direction dir = (Direction)(esp_random() % 4);
 
     SnakeBase snake;
     snake.body.push_front({x, y});

@@ -5,6 +5,8 @@
 
 #include <stdint.h>
 #include <vector>
+#include <random>
+#include <esp_system.h>
 
 #include "snake_world.hpp"
 #include "snake_player.hpp"
