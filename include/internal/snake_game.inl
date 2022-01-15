@@ -23,14 +23,13 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::AddPlayer(uint8_t id, Colo
     Position_type y = uniform_disty(e1);
 
     // std::uniform_int_distribution<typename std::underlying_type<Direction>::type> uniform_distDir(0, 3);
-    std::uniform_int_distribution<uint8_t> uniform_distDir(0, 3);
-    Direction dir = (Direction)uniform_disty(e1);
+    std::uniform_int_distribution<uint16_t> uniform_distDir(0, 3);
+    Direction dir = (Direction)uniform_distDir(e1);
 
     SnakeBase snake;
     snake.body.push_front({x, y});
-    snake.length = 2; // TODO make variable
-    SnakePlayer sp{id, snake, dir, headColor, bodyColor};
-    m_players.emplace(m_players.end(), sp);
+    snake.length = 5; // TODO make variable
+    m_players.emplace_back(id, snake, dir, headColor, bodyColor);
     m_world.SetPosition(snake.body.front(), State::PlayerHead, headColor);
 }
 
@@ -43,7 +42,8 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::RemovePlayer(uint8_t id)
     auto it = std::remove_if(m_players.begin(), m_players.end(), ids_match);
     if (it == m_players.end())
     {
-        // print error
+        Serial.write("RemovePlayer player unknown ");
+        Serial.write(id);
     }
 }
 
@@ -53,7 +53,16 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::ChangePlayerDirection(uint
     auto ids_match = [&id](SnakePlayer p) { return p.GetId() == id; };
 
     auto it = std::find_if(m_players.begin(), m_players.end(), ids_match);
-    it->UpdateDirection(d);
+
+    if (it != m_players.end())
+    {
+        it->UpdateDirection(d);
+    }
+    else
+    {
+        Serial.write("ChangePlayerDirection player unknown ");
+        Serial.write(id);
+    }
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
@@ -74,15 +83,31 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::CheckCollision()
 {
     std::vector<SnakePlayer*> playerWithCollisions;
     // check all players head against all other playes snakes
-    for (auto& p : m_players)
+    for (auto iter1 = m_players.begin(); iter1 != m_players.end(); iter1++)
     {
-        for (auto& otherP : m_players)
+        bool breakIter2Loop = false;
+        for (auto iter2 = iter1; !breakIter2Loop && iter2 != m_players.end(); iter2++)
         {
-            for (auto pos : otherP.GetSnake().body)
+            SnakeBase& iter2Snake{iter2->GetSnake()};
+            Position iter1Head = iter1->GetSnake().body.front();
+            for (auto posIter2 = iter2Snake.body.begin(); posIter2 != iter2Snake.body.end(); posIter2++)
             {
-                if (p.GetSnake().body.front().x == pos.x && p.GetSnake().body.front().y == pos.y)
+                // check for overlay of a head of a snake with any element of any snake (*including same snake body)
+                if (iter1Head == *posIter2)
                 {
-                    playerWithCollisions.push_back(&p);
+                    if ((iter1->GetId() == iter2->GetId()) && (posIter2 == iter2Snake.body.begin()))
+                    {
+                        // however avoid comparing current head against itself head
+                        continue;
+                    }
+
+                    Serial.write(iter1->GetId() + 0x30);
+                    SnakePlayer* playerRef = &(*iter1);
+                    playerWithCollisions.push_back(playerRef);
+
+                    // stop looping for current iter1, continue to check for next iter1
+                    breakIter2Loop = true;
+                    break;
                 }
             }
         }
@@ -91,8 +116,24 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::CheckCollision()
     // remove player from player container
     while (!playerWithCollisions.empty())
     {
+        Serial.write(" Player ");
+        Serial.write(playerWithCollisions.back()->GetId() + 0x30);
+        Serial.write(" lost!! ");
         SnakePlayer* p = playerWithCollisions.back();
+
+        // remove snake from world display
+        p->RemoveDisplay(m_world);
+
         auto ids_match = [p](SnakePlayer& oneOfPlayersList) { return oneOfPlayersList.GetId() == p->GetId(); };
-        std::remove_if(m_players.begin(), m_players.end(), ids_match);
+        auto it = std::remove_if(m_players.begin(), m_players.end(), ids_match);
+        if (it == m_players.end())
+        {
+            Serial.write("CheckCollision player unknown " + playerWithCollisions.back()->GetId());
+        }
+        else
+        {
+            m_players.erase(it);
+        }
+        playerWithCollisions.pop_back();
     }
 }

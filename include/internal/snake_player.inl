@@ -2,10 +2,10 @@
 
 #include "snake_player.hpp"
 
-SnakePlayer::SnakePlayer(uint8_t id, SnakeBase snake, Direction m_dir, Color headColor, Color bodyColor)
-    : id(id)
-    , snake(snake)
-    , m_dir(m_dir)
+SnakePlayer::SnakePlayer(uint8_t id, SnakeBase snake, Direction dir, Color headColor, Color bodyColor)
+    : m_id(id)
+    , m_snake(snake)
+    , m_dir(dir)
     , m_headColor(headColor)
     , m_bodyColor(bodyColor)
 {
@@ -15,35 +15,49 @@ template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 void SnakePlayer::MoveSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& world)
 {
     // old head
-    world.SetPosition(snake.body.front(), State::PlayerBody, m_bodyColor);
+    world.SetPosition(m_snake.body.front(), State::PlayerBody, m_bodyColor);
 
     // new head
-    MovePos fromPos{m_dir, snake.body.front()};
-    world.MovePixel(fromPos);
-    if (world.GetPosition(snake.body.front()) == State::Snack)
+    MovePos movedPixel{m_dir, m_snake.body.front()};
+    world.MovePixel(movedPixel);
+    if (world.GetPosition(movedPixel.pos) == State::Snack)
     {
-        snake.length++;
-        world.SetPosition(world.GetFreePosition(), State::Snack, world.GetSnackColor());
+        m_snake.length++;
+        Position snackPos;
+        do
+        {
+            snackPos = world.GetFreePosition();
+        } while (snackPos.x == movedPixel.pos.x && snackPos.y == movedPixel.pos.y);
+        world.SetPosition(snackPos, State::Snack, world.GetSnackColor());
     }
-    snake.body.push_front(snake.body.front());
-    world.SetPosition(snake.body.front(), State::PlayerHead, m_headColor);
+    m_snake.body.push_front(movedPixel.pos);
+    world.SetPosition(m_snake.body.front(), State::PlayerHead, m_headColor);
 
     // old tail
-    if (snake.body.size() >= snake.length)
+    if (m_snake.body.size() > m_snake.length)
     {
-        world.SetPosition(snake.body.back(), State::Free, world.GetFreeColor());
-        snake.body.pop_back();
+        world.SetPosition(m_snake.body.back(), State::Free, world.GetFreeColor());
+        m_snake.body.pop_back();
     }
 }
 
 uint8_t SnakePlayer::GetId()
 {
-    return id;
+    return m_id;
 }
 
-SnakeBase SnakePlayer::GetSnake()
+SnakeBase& SnakePlayer::GetSnake()
 {
-    return snake;
+    return m_snake;
+}
+
+template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
+void SnakePlayer::RemoveDisplay(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& world)
+{
+    for (Position& pos : m_snake.body)
+    {
+        world.SetPosition(pos, State::Free, world.GetFreeColor());
+    }
 }
 
 void SnakePlayer::UpdateDirection(Direction turn)

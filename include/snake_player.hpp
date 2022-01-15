@@ -11,6 +11,7 @@
 class SnakePlayer
 {
   public:
+    SnakePlayer() = delete;
     SnakePlayer(uint8_t id, SnakeBase snake, Direction m_dir, Color headColor, Color bodyColor);
 
     template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
@@ -20,11 +21,14 @@ class SnakePlayer
 
     uint8_t GetId();
 
-    SnakeBase GetSnake();
+    SnakeBase& GetSnake();
+
+    template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
+    void RemoveDisplay(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& world);
 
   private:
-    uint8_t id;
-    SnakeBase snake;
+    uint8_t m_id;
+    SnakeBase m_snake;
     Direction m_dir;
     Color m_headColor;
     Color m_bodyColor;

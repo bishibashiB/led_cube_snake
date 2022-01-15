@@ -7,10 +7,13 @@
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::SnakeWorld(const std::array<PanelCfg, tileNumX * tileNumY>& cfg,
                                                              Adafruit_NeoMatrix& matrix)
-    : cfg(cfg)
+    : m_cfg(cfg)
+    , m_world{State::Free}
     , m_matrix(matrix)
 {
     m_matrix.fillScreen(0);
+    Position snackPos = GetFreePosition();
+    SetPosition(snackPos, State::Snack, GetSnackColor());
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
@@ -44,16 +47,18 @@ void SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::Update()
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 Position SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetFreePosition()
 {
-    Position_type x, y;
-    do
-    {
+    uint16_t x, y;
+    Position p;
         std::random_device r;
         std::default_random_engine e1(r());
-        std::uniform_int_distribution<Position_type> uniform_distx(0, matrixX * tileNumX - 1); // spawn on same panel
+    std::uniform_int_distribution<uint16_t> uniform_distx(0, matrixX * tileNumX - 1); // spawn on same panel
+    std::uniform_int_distribution<uint16_t> uniform_disty(0, matrixY * tileNumY - 1); // spawn on same panel
+    do
+    {
         x = uniform_distx(e1);
-        std::uniform_int_distribution<Position_type> uniform_disty(0, matrixY * tileNumY - 1); // spawn on same panel
         y = uniform_disty(e1);
-    } while (GetPosition({x, y}) != State::Free);
+        p = Position{x, y};
+    } while (GetPosition(p) != State::Free);
     return {x, y};
 }
 
@@ -179,16 +184,16 @@ const PanelCfg& SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetPanelFromPo
     // either do a look-up through PanelArray.Position (slow, TODO) or calc idx from x-Position
     if (tileNumY == 1)
     {
-        return cfg[p.x / matrixX];
+        return m_cfg[p.x / matrixX];
     }
     else if (tileNumX == 1)
     {
-        return cfg[p.y / matrixY];
+        return m_cfg[p.y / matrixY];
     }
     else
     {
         Serial.print("Error GetPanelFromPosition() implement me!");
-        return cfg[0];
+        return m_cfg[0];
     }
 }
 
@@ -250,7 +255,7 @@ const PanelCfg* SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetNeigborPane
     else
     {
         Serial.print("Error GetNeigborPanel() !");
-        return &cfg[0];
+        return &m_cfg[0];
     }
 }
 

@@ -16,6 +16,16 @@ struct Position
 {
     Position_type x;
     Position_type y;
+
+    bool operator==(Position rhs)
+    {
+        return (rhs.x == x && rhs.y == y);
+    }
+
+    const bool operator==(Position rhs) const
+    {
+        return (rhs.x == x && rhs.y == y);
+    }
 };
 
 struct SnakeBase

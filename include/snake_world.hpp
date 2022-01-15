@@ -55,9 +55,9 @@ class SnakeWorld
     MovePos GetNeigborPosition(const MovePos f);
 
 
-    const std::array<PanelCfg, tileNumX * tileNumY>& cfg;
+    const std::array<PanelCfg, tileNumX * tileNumY>& m_cfg;
     State m_world[matrixX * tileNumX][matrixY * tileNumY];
-    Color m_colorWorld[matrixX * tileNumX][matrixY * tileNumY];
+    // Color m_colorWorld[matrixX * tileNumX][matrixY * tileNumY];
     Adafruit_NeoMatrix& m_matrix;
 };
 
