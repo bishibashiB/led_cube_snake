@@ -3,7 +3,7 @@
 #include <Adafruit_GFX.h> // Core graphics library
 #include <Adafruit_NeoMatrix.h>
 #include <Adafruit_NeoPixel.h>
-#include "math.h"
+
 
 #include "config.h"
 #include "snake_types.hpp"
@@ -36,11 +36,9 @@ void setup()
 
 void loop()
 {
-    const std::array<PanelCfg, TileNum_X * TileNum_Y> PanelArray{};
-
-    SnakeWorld<sizeX, sizeY, TileNum_X, TileNum_Y> world{PanelArray, matrix};
-    SnakeGame<sizeX, sizeY, TileNum_X, TileNum_Y> game{world};
-
+    extern const std::array<PanelCfg, TileNum_X * TileNum_Y> PanelArray;
+    SnakeWorld<Matrix_X, Matrix_Y, TileNum_X, TileNum_Y> world{PanelArray, matrix};
+    SnakeGame<Matrix_X, Matrix_Y, TileNum_X, TileNum_Y> game{world};
     if (Serial.available())
     {
         char terminator = '\n';

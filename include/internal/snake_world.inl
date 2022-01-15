@@ -83,29 +83,29 @@ Position SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetFreePosition()
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIsEdgeOfPanel(const Position p)
 {
-    return (((p.x % Matrix_X) == 0) || ((p.x % Matrix_X) == (Matrix_X - 1)) || ((p.y % Matrix_Y) == 0)
-            || ((p.y % Matrix_Y) == (Matrix_Y - 1)));
+    return (((p.x % matrixX) == 0) || ((p.x % matrixX) == (matrixX - 1)) || ((p.y % matrixY) == 0)
+            || ((p.y % matrixY) == (matrixY - 1)));
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge1(const MovePos f)
 {
-    return ((f.pos.y % Matrix_Y) == 0);
+    return ((f.pos.y % matrixY) == 0);
 }
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge2(const MovePos f)
 {
-    return ((f.pos.x % Matrix_X) == (Matrix_X - 1));
+    return ((f.pos.x % matrixX) == (matrixX - 1));
 }
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge3(const MovePos f)
 {
-    return ((f.pos.y % Matrix_Y) == (Matrix_Y - 1));
+    return ((f.pos.y % matrixY) == (matrixY - 1));
 }
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIs_Edge4(const MovePos f)
 {
-    return ((f.pos.x % Matrix_X) == 0);
+    return ((f.pos.x % matrixX) == 0);
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
@@ -139,22 +139,22 @@ bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIsEdgeOfPanelAndLeavin
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIsCornerOfPanel(const Position p)
 {
-    return ((((p.x % Matrix_X) == 0) && ((p.y % Matrix_Y) == 0))
-            || (((p.x % Matrix_X) == 0) && ((p.y % Matrix_Y) == (Matrix_Y - 1)))
-            || (((p.x % Matrix_X) == (Matrix_X - 1)) && ((p.y % Matrix_Y) == 0))
-            || (((p.x % Matrix_X) == (Matrix_X - 1)) && ((p.y % Matrix_Y) == (Matrix_Y - 1))));
+    return ((((p.x % matrixX) == 0) && ((p.y % matrixY) == 0))
+            || (((p.x % matrixX) == 0) && ((p.y % matrixY) == (matrixY - 1)))
+            || (((p.x % matrixX) == (matrixX - 1)) && ((p.y % matrixY) == 0))
+            || (((p.x % matrixX) == (matrixX - 1)) && ((p.y % matrixY) == (matrixY - 1))));
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 bool SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::PosIsCornerOfPanelAndLeaving(const MovePos f)
 {
-    return ((((f.pos.x % Matrix_X) == 0) && ((f.pos.y % Matrix_Y) == 0)
+    return ((((f.pos.x % matrixX) == 0) && ((f.pos.y % matrixY) == 0)
              && (f.m_dir == Direction::Up || f.m_dir == Direction::Left))
-            || (((f.pos.x % Matrix_X) == 0) && ((f.pos.y % Matrix_Y) == (Matrix_Y - 1))
+            || (((f.pos.x % matrixX) == 0) && ((f.pos.y % matrixY) == (matrixY - 1))
                 && (f.m_dir == Direction::Up || f.m_dir == Direction::Right))
-            || (((f.pos.x % Matrix_X) == (Matrix_X - 1)) && ((f.pos.y % Matrix_Y) == 0)
+            || (((f.pos.x % matrixX) == (matrixX - 1)) && ((f.pos.y % matrixY) == 0)
                 && (f.m_dir == Direction::Down || f.m_dir == Direction::Left))
-            || (((f.pos.x % Matrix_X) == (Matrix_X - 1)) && ((f.pos.y % Matrix_Y) == (Matrix_Y - 1))
+            || (((f.pos.x % matrixX) == (matrixX - 1)) && ((f.pos.y % matrixY) == (matrixY - 1))
                 && (f.m_dir == Direction::Down || f.m_dir == Direction::Right)));
 }
 
@@ -162,13 +162,13 @@ template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 const PanelCfg& SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetPanelFromPosition(const Position p)
 {
     // either do a look-up through PanelArray.Position (slow, TODO) or calc idx from x-Position
-    if (TileNum_Y == 1)
+    if (tileNumY == 1)
     {
-        return cfg[p.x / Matrix_X];
+        return cfg[p.x / matrixX];
     }
-    else if (TileNum_X == 1)
+    else if (tileNumX == 1)
     {
-        return cfg[p.y / Matrix_Y];
+        return cfg[p.y / matrixY];
     }
     else
     {
@@ -180,7 +180,7 @@ const PanelCfg& SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetPanelFromPo
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 const Position SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetPosOnCurPanel(const Position p)
 {
-    return {p.x % Matrix_X, p.y % Matrix_Y};
+    return {(Position_type)(p.x % matrixX), (Position_type)(p.y % matrixY)};
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>

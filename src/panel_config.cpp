@@ -60,4 +60,4 @@ const PanelCfg panelE{{{&panelA, PanelSides::Side2},
 
 // this array will be used also to resolve the pixel address resolution from 'total' to 'panel' level
 // it's needed to align 2d matrix layout to 3d cube
-const std::array<PanelCfg, TileNum_X* TileNum_Y> PanelArray = {panelA, panelB, panelC, panelD, panelE};
+static const std::array<PanelCfg, TileNum_X* TileNum_Y> PanelArray = {panelA, panelB, panelC, panelD, panelE};
