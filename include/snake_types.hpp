@@ -18,8 +18,9 @@ struct Position
     Position_type y;
 };
 
-struct SnakeBase{
-     std::list<Position> body;
+struct SnakeBase
+{
+    std::list<Position> body;
     Position_type length;
 };
 
@@ -108,4 +109,13 @@ enum class SerialCmd : uint8_t
     DIR_CMD_PLAYER = 4, // "1Byte number/ID, 1Byte NEW rel. direction ('r', 'l')"
 };
 
+////////////////
+// Adafruit Color Extension types
+////////////////
+struct Color
+{
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+};
 #endif // SNAKE_TYPES_HPP

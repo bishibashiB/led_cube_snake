@@ -18,12 +18,15 @@ class SnakeWorld
 
     State GetPosition(Position p);
 
-    void SetPosition(Position p, State state);
+    void SetPosition(Position p, State state, Color c);
 
     void Update();
     void MovePixel(MovePos& mp);
     void AddNewSnack();
     Position GetFreePosition();
+
+    Color GetSnackColor();
+    Color GetFreeColor();
 
   private:
     // void blendPixels(byte x, byte y, uint32_t p1, uint32_t p2, byte iter);
@@ -54,7 +57,7 @@ class SnakeWorld
 
     const std::array<PanelCfg, tileNumX * tileNumY>& cfg;
     State m_world[matrixX * tileNumX][matrixY * tileNumY];
-    State m_newWorld[matrixX * tileNumX][matrixY * tileNumY];
+    Color m_colorWorld[matrixX * tileNumX][matrixY * tileNumY];
     Adafruit_NeoMatrix& m_matrix;
 };
 

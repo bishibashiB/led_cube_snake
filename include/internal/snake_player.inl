@@ -2,10 +2,12 @@
 
 #include "snake_player.hpp"
 
-SnakePlayer::SnakePlayer(uint8_t id, SnakeBase snake, Direction m_dir)
+SnakePlayer::SnakePlayer(uint8_t id, SnakeBase snake, Direction m_dir, Color headColor, Color bodyColor)
     : id(id)
     , snake(snake)
     , m_dir(m_dir)
+    , m_headColor(headColor)
+    , m_bodyColor(bodyColor)
 {
 }
 
@@ -13,7 +15,7 @@ template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 void SnakePlayer::MoveSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& world)
 {
     // old head
-    world.SetPosition(snake.body.front(), State::PlayerBody);
+    world.SetPosition(snake.body.front(), State::PlayerBody, m_bodyColor);
 
     // new head
     MovePos fromPos{m_dir, snake.body.front()};
@@ -21,15 +23,15 @@ void SnakePlayer::MoveSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& wo
     if (world.GetPosition(snake.body.front()) == State::Snack)
     {
         snake.length++;
-        world.SetPosition(world.GetFreePosition(), State::Snack);
+        world.SetPosition(world.GetFreePosition(), State::Snack, world.GetSnackColor());
     }
     snake.body.push_front(snake.body.front());
-    world.SetPosition(snake.body.front(), State::PlayerHead);
+    world.SetPosition(snake.body.front(), State::PlayerHead, m_headColor);
 
     // old tail
     if (snake.body.size() >= snake.length)
     {
-        world.SetPosition(snake.body.back(), State::Free);
+        world.SetPosition(snake.body.back(), State::Free, world.GetFreeColor());
         snake.body.pop_back();
     }
 }

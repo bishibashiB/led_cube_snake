@@ -11,7 +11,7 @@
 class SnakePlayer
 {
   public:
-    SnakePlayer(uint8_t id, SnakeBase snake, Direction m_dir);
+    SnakePlayer(uint8_t id, SnakeBase snake, Direction m_dir, Color headColor, Color bodyColor);
 
     template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
     void MoveSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& world);
@@ -26,6 +26,8 @@ class SnakePlayer
     uint8_t id;
     SnakeBase snake;
     Direction m_dir;
+    Color m_headColor;
+    Color m_bodyColor;
 };
 
 #include "./internal/snake_player.inl"

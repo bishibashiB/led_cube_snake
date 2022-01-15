@@ -12,7 +12,7 @@ SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::SnakeGame(SnakeWorld<matrixX, m
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
-void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::AddPlayer(uint8_t id)
+void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::AddPlayer(uint8_t id, Color headColor, Color bodyColor)
 {
     // generate random snake head to world for display
     std::random_device r;
@@ -29,9 +29,9 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::AddPlayer(uint8_t id)
     SnakeBase snake;
     snake.body.push_front({x, y});
     snake.length = 2; // TODO make variable
-    SnakePlayer sp{id, snake, dir};
+    SnakePlayer sp{id, snake, dir, headColor, bodyColor};
     m_players.emplace(m_players.end(), sp);
-    m_world.SetPosition(snake.body.front(), State::PlayerHead);
+    m_world.SetPosition(snake.body.front(), State::PlayerHead, headColor);
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
@@ -67,6 +67,7 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::IterateWorld()
     CheckCollision();
     m_world.Update();
 }
+
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::CheckCollision()

@@ -49,7 +49,9 @@ void loop()
         case SerialCmd::ADD_PLAYER:
             Serial.write("ADD_PLAYER ");
             Serial.write(readData.c_str()[1]);
-            game.AddPlayer(readData.c_str()[1]);
+            game.AddPlayer(readData.c_str()[1],
+                           {readData.c_str()[2], readData.c_str()[3], readData.c_str()[4]},
+                           {readData.c_str()[5], readData.c_str()[6], readData.c_str()[7]});
             break;
         case SerialCmd::REMOVE_PLAYER:
             Serial.write("REMOVE_PLAYER ");

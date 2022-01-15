@@ -20,10 +20,10 @@ State SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetPosition(Position p)
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
-void SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::SetPosition(Position p, State state)
+void SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::SetPosition(Position p, State state, Color c)
 {
     m_world[p.x][p.y] = state;
-    m_matrix.drawPixel(p.x, p.y, m_matrix.Color(1, 1, 1)); // FIXME
+    m_matrix.drawPixel(p.x, p.y, m_matrix.Color(c.r, c.g, c.b));
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
@@ -56,6 +56,21 @@ Position SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetFreePosition()
     } while (GetPosition({x, y}) != State::Free);
     return {x, y};
 }
+
+
+template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
+Color SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetSnackColor()
+{
+    return {150, 150, 150};
+}
+
+
+template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
+Color SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetFreeColor()
+{
+    return {0, 0, 0};
+}
+
 
 // template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 // void SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::blendPixels(byte x, byte y, uint32_t p1, uint32_t p2, byte

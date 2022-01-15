@@ -15,7 +15,7 @@ class SnakeGame
   public:
     SnakeGame(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& world);
 
-    void AddPlayer(uint8_t id);
+    void AddPlayer(uint8_t id, Color headColor, Color bodyColor);
     void RemovePlayer(uint8_t id);
 
     void ChangePlayerDirection(uint8_t id, Direction d);
@@ -25,6 +25,7 @@ class SnakeGame
     // 3) check collision (self / inter-players)
     // 4) deconstruct game-over players (remove from vector)
     void IterateWorld();
+
 
   private:
     // (self / inter-players), also directly removes game-over player
