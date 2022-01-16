@@ -13,6 +13,17 @@ SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::SnakeGame(SnakeWorld<matrixX, m
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::AddPlayer(uint8_t id, Color headColor, Color bodyColor)
 {
+    // sanity check: player already exists (async serial inputs e.g. program restarted w/o cleanup)
+    auto ids_match = [&id](SnakePlayer p) { return p.GetId() == id; };
+    auto it = std::find_if(m_players.begin(), m_players.end(), ids_match);
+
+    if (it != m_players.end())
+    {
+        Serial.write("AddPlayer already existing ");
+        Serial.write(id + 0x30);
+        return;
+    }
+
     Position_type x = esp_random() % (matrixX);
     Position_type y = esp_random() % (matrixY);
 
