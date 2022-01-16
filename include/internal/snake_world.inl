@@ -12,7 +12,12 @@ SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::SnakeWorld(const std::array<Pa
     , m_matrix(matrix)
 {
     m_matrix.fillScreen(0);
+    // how about having 3 snacks?
     Position snackPos = GetFreePosition();
+    SetPosition(snackPos, State::Snack, GetSnackColor());
+    snackPos = GetFreePosition();
+    SetPosition(snackPos, State::Snack, GetSnackColor());
+    snackPos = GetFreePosition();
     SetPosition(snackPos, State::Snack, GetSnackColor());
 }
 

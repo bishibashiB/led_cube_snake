@@ -1,4 +1,5 @@
 
+#include <cstdlib>
 
 #include "snake_types.hpp"
 #include "snake_game.hpp"
@@ -80,11 +81,12 @@ template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::CheckCollision()
 {
     std::vector<SnakePlayer*> playerWithCollisions;
+
     // check all players head against all other playes snakes
     for (auto iter1 = m_players.begin(); iter1 != m_players.end(); iter1++)
     {
         bool breakIter2Loop = false;
-        for (auto iter2 = iter1; !breakIter2Loop && iter2 != m_players.end(); iter2++)
+        for (auto iter2 = m_players.begin(); !breakIter2Loop && iter2 != m_players.end(); iter2++)
         {
             SnakeBase& iter2Snake{iter2->GetSnake()};
             Position iter1Head = iter1->GetSnake().body.front();
@@ -93,15 +95,33 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::CheckCollision()
                 // check for overlay of a head of a snake with any element of any snake (*including same snake body)
                 if (iter1Head == *posIter2)
                 {
-                    if ((iter1->GetId() == iter2->GetId()) && (posIter2 == iter2Snake.body.begin()))
+                    if (iter1->GetId() == iter2->GetId())
                     {
-                        // however avoid comparing current head against itself head
-                        continue;
+                        if (posIter2 == iter2Snake.body.begin())
+                        {
+                            // however avoid comparing current head against itself head
+                            continue;
+                        }
+                        else
+                        {
+                            // cannibalism
+                            iter1->RemoveDisplay(m_world);
+                        }
+                    }
+                    else
+                    {
+                        if (posIter2 == iter2Snake.body.begin())
+                        {
+                            // head on head
+                            iter1->RemoveDisplay(m_world);
+                        }
+                        else
+                        {
+                            iter1->RemoveDisplayWithoutHead(m_world);
+                        }
                     }
 
-                    Serial.write(iter1->GetId() + 0x30);
-                    SnakePlayer* playerRef = &(*iter1);
-                    playerWithCollisions.push_back(playerRef);
+                    playerWithCollisions.push_back(&(*iter1));
 
                     // stop looping for current iter1, continue to check for next iter1
                     breakIter2Loop = true;
@@ -116,11 +136,12 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::CheckCollision()
     {
         Serial.write(" Player ");
         Serial.write(playerWithCollisions.back()->GetId() + 0x30);
-        Serial.write(" lost!! ");
+        Serial.write(" lost!! Length ");
+        char buff[20];
+        Serial.write(itoa(playerWithCollisions.back()->GetSnake().length, buff, 10));
         SnakePlayer* p = playerWithCollisions.back();
 
-        // remove snake from world display
-        p->RemoveDisplay(m_world);
+        // remove snake from world display, done in above loop
 
         auto ids_match = [p](SnakePlayer& oneOfPlayersList) { return oneOfPlayersList.GetId() == p->GetId(); };
         auto it = std::remove_if(m_players.begin(), m_players.end(), ids_match);

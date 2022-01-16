@@ -31,8 +31,11 @@ void SnakePlayer::MoveSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& wo
     }
     m_snake.body.push_front(movedPixel.pos);
     m_dir = movedPixel.dir;
-    world.SetPosition(m_snake.body.front(), State::PlayerHead, m_headColor);
-
+    // only paint if the field is not taken by other player
+    if (world.GetPosition(movedPixel.pos) != State::PlayerHead)
+    {
+        world.SetPosition(m_snake.body.front(), State::PlayerHead, m_headColor);
+    }
     // old tail
     if (m_snake.body.size() > m_snake.length)
     {
@@ -56,6 +59,18 @@ void SnakePlayer::RemoveDisplay(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>
 {
     for (Position& pos : m_snake.body)
     {
+        world.SetPosition(pos, State::Free, world.GetFreeColor());
+    }
+}
+
+template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
+void SnakePlayer::RemoveDisplayWithoutHead(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& world)
+{
+    // in case of snake2body collision do not make a whole in the other snake
+    for (Position& pos : m_snake.body)
+    {
+        if (pos == m_snake.body.front())
+            continue;
         world.SetPosition(pos, State::Free, world.GetFreeColor());
     }
 }
