@@ -32,7 +32,8 @@ void SnakePlayer::MoveSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& wo
     m_snake.body.push_front(movedPixel.pos);
     m_dir = movedPixel.dir;
     // only paint if the field is not taken by other player
-    if (world.GetPosition(movedPixel.pos) != State::PlayerHead)
+    if (world.GetPosition(movedPixel.pos) != State::PlayerHead
+        || world.GetPosition(movedPixel.pos) != State::PlayerBody)
     {
         world.SetPosition(m_snake.body.front(), State::PlayerHead, m_headColor);
     }
