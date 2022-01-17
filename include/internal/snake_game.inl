@@ -8,6 +8,13 @@ template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
 SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::SnakeGame(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& world)
     : m_world(world)
 {
+    // how about having 3 snacks?
+    Position snackPos = m_world.GetFreePosition();
+    m_world.SetPosition(snackPos, State::Snack, SNACK_COLOR);
+    snackPos = m_world.GetFreePosition();
+    m_world.SetPosition(snackPos, State::Snack, SNACK_COLOR);
+    snackPos = m_world.GetFreePosition();
+    m_world.SetPosition(snackPos, State::Snack, SNACK_COLOR);
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
@@ -26,9 +33,6 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::AddPlayer(uint8_t id, Colo
 
     Position_type x = esp_random() % (matrixX);
     Position_type y = esp_random() % (matrixY);
-
-    // std::uniform_int_distribution<typename std::underlying_type<Direction>::type> uniform_distDir(0, 3);
-    std::uniform_int_distribution<uint16_t> uniform_distDir(0, 3);
     Direction dir = (Direction)(esp_random() % 4);
 
     SnakeBase snake;

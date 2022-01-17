@@ -12,13 +12,6 @@ SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::SnakeWorld(const std::array<Pa
     , m_matrix(matrix)
 {
     m_matrix.fillScreen(0);
-    // how about having 3 snacks?
-    Position snackPos = GetFreePosition();
-    SetPosition(snackPos, State::Snack, GetSnackColor());
-    snackPos = GetFreePosition();
-    SetPosition(snackPos, State::Snack, GetSnackColor());
-    snackPos = GetFreePosition();
-    SetPosition(snackPos, State::Snack, GetSnackColor());
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
@@ -62,20 +55,6 @@ Position SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetFreePosition()
         p = Position{x, y};
     } while (GetPosition(p) != State::Free);
     return {x, y};
-}
-
-
-template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
-Color SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetSnackColor()
-{
-    return {150, 150, 150};
-}
-
-
-template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
-Color SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>::GetFreeColor()
-{
-    return {0, 0, 0};
 }
 
 

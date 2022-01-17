@@ -86,7 +86,7 @@ struct PanelSide
 };
 
 // this is 4 sides of a square panel
-struct NeighborsTable
+struct NeighborsLookUp
 {
     PanelSide fromSide1;
     PanelSide fromSide2;
@@ -103,7 +103,7 @@ struct PanelRange
 
 struct PanelCfg
 {
-    NeighborsTable tbl;
+    NeighborsLookUp tbl;
     PanelRange range;
 };
 
@@ -128,4 +128,9 @@ struct Color
     uint8_t g;
     uint8_t b;
 };
+
+// while player colors are received via serial interface (currently) snack and Free color are fixed
+constexpr Color SNACK_COLOR = {150, 150, 150};
+constexpr Color FREE_COLOR = {0, 0, 0};
+
 #endif // SNAKE_TYPES_HPP

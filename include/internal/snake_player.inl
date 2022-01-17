@@ -27,7 +27,7 @@ void SnakePlayer::MoveSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& wo
         {
             snackPos = world.GetFreePosition();
         } while (snackPos.x == movedPixel.pos.x && snackPos.y == movedPixel.pos.y);
-        world.SetPosition(snackPos, State::Snack, world.GetSnackColor());
+        world.SetPosition(snackPos, State::Snack, SNACK_COLOR);
     }
     m_snake.body.push_front(movedPixel.pos);
     m_dir = movedPixel.dir;
@@ -40,7 +40,7 @@ void SnakePlayer::MoveSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& wo
     // old tail
     if (m_snake.body.size() > m_snake.length)
     {
-        world.SetPosition(m_snake.body.back(), State::Free, world.GetFreeColor());
+        world.SetPosition(m_snake.body.back(), State::Free, FREE_COLOR);
         m_snake.body.pop_back();
     }
 }
@@ -60,7 +60,7 @@ void SnakePlayer::RemoveDisplay(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>
 {
     for (Position& pos : m_snake.body)
     {
-        world.SetPosition(pos, State::Free, world.GetFreeColor());
+        world.SetPosition(pos, State::Free, FREE_COLOR);
     }
 }
 
@@ -72,7 +72,7 @@ void SnakePlayer::RemoveDisplayWithoutHead(SnakeWorld<matrixX, matrixY, tileNumX
     {
         if (pos == m_snake.body.front())
             continue;
-        world.SetPosition(pos, State::Free, world.GetFreeColor());
+        world.SetPosition(pos, State::Free, FREE_COLOR);
     }
 }
 
