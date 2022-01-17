@@ -120,19 +120,6 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::CheckCollision()
                         else
                         {
                             // cannibalism
-                            iter1->RemoveDisplay(m_world);
-                        }
-                    }
-                    else
-                    {
-                        if (posIter2 == iter2Snake.body.begin())
-                        {
-                            // head on head
-                            iter1->RemoveDisplay(m_world);
-                        }
-                        else
-                        {
-                            iter1->RemoveDisplayWithoutHead(m_world);
                         }
                     }
 
@@ -147,27 +134,36 @@ void SnakeGame<matrixX, matrixY, tileNumX, tileNumY>::CheckCollision()
     }
 
     // remove player from player container
-    while (!playerWithCollisions.empty())
+    if (!playerWithCollisions.empty())
     {
-        Serial.write(" Player ");
-        Serial.write(playerWithCollisions.back()->GetId() + 0x30);
-        Serial.write(" lost!! Length ");
-        char buff[20];
-        Serial.write(itoa(playerWithCollisions.back()->GetSnake().length, buff, 10));
-        SnakePlayer* p = playerWithCollisions.back();
-
-        // remove snake from world display, done in above loop
-
-        auto ids_match = [p](SnakePlayer& oneOfPlayersList) { return oneOfPlayersList.GetId() == p->GetId(); };
-        auto it = std::remove_if(m_players.begin(), m_players.end(), ids_match);
-        if (it == m_players.end())
+        while (!playerWithCollisions.empty())
         {
-            Serial.write("CheckCollision player unknown " + playerWithCollisions.back()->GetId());
+            Serial.write(" Player ");
+            Serial.write(playerWithCollisions.back()->GetId() + 0x30);
+            Serial.write(" lost!! Length ");
+            char buff[20];
+            Serial.write(itoa(playerWithCollisions.back()->GetSnake().length, buff, 10));
+            SnakePlayer* p = playerWithCollisions.back();
+
+            // remove snake from world display
+            p->RemoveDisplay(m_world);
+
+            auto ids_match = [p](SnakePlayer& oneOfPlayersList) { return oneOfPlayersList.GetId() == p->GetId(); };
+            auto it = std::remove_if(m_players.begin(), m_players.end(), ids_match);
+            if (it == m_players.end())
+            {
+                Serial.write("CheckCollision player unknown " + playerWithCollisions.back()->GetId());
+            }
+            else
+            {
+                m_players.erase(it);
+            }
+            playerWithCollisions.pop_back();
         }
-        else
+        // redraw al remaining snakes, as they may have indefinite (overwritten) fields
+        for (auto iter1 = m_players.begin(); iter1 != m_players.end(); iter1++)
         {
-            m_players.erase(it);
+            iter1->RedrawSnake(m_world);
         }
-        playerWithCollisions.pop_back();
     }
 }

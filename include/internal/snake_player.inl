@@ -29,18 +29,20 @@ void SnakePlayer::MoveSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& wo
         } while (snackPos.x == movedPixel.pos.x && snackPos.y == movedPixel.pos.y);
         world.SetPosition(snackPos, State::Snack, SNACK_COLOR);
     }
+
     m_snake.body.push_front(movedPixel.pos);
     m_dir = movedPixel.dir;
-    // only paint if the field is not taken by other player
-    if (world.GetPosition(movedPixel.pos) != State::PlayerHead
-        || world.GetPosition(movedPixel.pos) != State::PlayerBody)
-    {
-        world.SetPosition(m_snake.body.front(), State::PlayerHead, m_headColor);
-    }
+    world.SetPosition(m_snake.body.front(), State::PlayerHead, m_headColor);
+
+
     // old tail
     if (m_snake.body.size() > m_snake.length)
     {
-        world.SetPosition(m_snake.body.back(), State::Free, FREE_COLOR);
+        // already other head moved there (legal free space)
+        if (world.GetPosition(m_snake.body.back()) != State::PlayerHead)
+        {
+            world.SetPosition(m_snake.body.back(), State::Free, FREE_COLOR);
+        }
         m_snake.body.pop_back();
     }
 }
@@ -53,6 +55,16 @@ uint8_t SnakePlayer::GetId()
 SnakeBase& SnakePlayer::GetSnake()
 {
     return m_snake;
+}
+
+template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
+void SnakePlayer::RedrawSnake(SnakeWorld<matrixX, matrixY, tileNumX, tileNumY>& world)
+{
+    world.SetPosition(m_snake.body.front(), State::PlayerHead, m_headColor);
+    for (auto iter = m_snake.body.begin()++; iter != m_snake.body.end(); iter++)
+    {
+        world.SetPosition(*iter, State::PlayerBody, m_bodyColor);
+    }
 }
 
 template <uint8_t matrixX, uint8_t matrixY, uint8_t tileNumX, uint8_t tileNumY>
