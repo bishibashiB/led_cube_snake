@@ -1,0 +1,59 @@
+{
+	"folders": [
+		{
+			"name": "LedCube_snake",
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"deque": "cpp",
+			"string": "cpp",
+			"unordered_map": "cpp",
+			"unordered_set": "cpp",
+			"vector": "cpp",
+			"exception": "cpp",
+			"functional": "cpp",
+			"random": "cpp",
+			"*.tcc": "cpp",
+			"fstream": "cpp",
+			"initializer_list": "cpp",
+			"istream": "cpp",
+			"new": "cpp",
+			"ostream": "cpp",
+			"sstream": "cpp",
+			"stdexcept": "cpp",
+			"streambuf": "cpp",
+			"system_error": "cpp",
+			"tuple": "cpp",
+			"type_traits": "cpp",
+			"typeinfo": "cpp",
+			"array": "cpp",
+			"iostream": "cpp",
+			"cctype": "cpp",
+			"clocale": "cpp",
+			"cmath": "cpp",
+			"cstdarg": "cpp",
+			"cstddef": "cpp",
+			"cstdint": "cpp",
+			"cstdio": "cpp",
+			"cstdlib": "cpp",
+			"cstring": "cpp",
+			"ctime": "cpp",
+			"cwchar": "cpp",
+			"cwctype": "cpp",
+			"algorithm": "cpp",
+			"iomanip": "cpp",
+			"iosfwd": "cpp",
+			"limits": "cpp",
+			"memory": "cpp",
+			"numeric": "cpp",
+			"cinttypes": "cpp",
+			"utility": "cpp",
+			"list": "cpp"
+		},
+		"C_Cpp.clang_format_sortIncludes": false,
+		"C_Cpp.clang_format_path": "/usr/bin/clang-format",
+		"C_Cpp.formatting": "clangFormat"
+	}
+}
